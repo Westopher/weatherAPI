@@ -7,7 +7,7 @@ import SwiftyJSON
 class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Constants
-    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=61fe2713c932b2a01162cf784e550f91"
+    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
     let APP_ID = "61fe2713c932b2a01162cf784e550f91"
     /***Get your own App ID at https://openweathermap.org/appid ****/
     
@@ -44,8 +44,10 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
             response in
             if response.result.isSuccess {
                 print("got weather data")
+                print(parameters)
                 let weatherJSON: JSON = JSON(response.result.value!)
                 print(weatherJSON)
+                self.updateWeatherData(json: weatherJSON)
             } else {
                 print("Error \(response.result.error)")
                 self.cityLabel.text = "Connection Failed"
@@ -63,7 +65,9 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
    
     
     //Write the updateWeatherData method here:
-    
+    func updateWeatherData(json: JSON) {
+        let tempREsult = json["main"]["temp"]
+    }
 
     
     
@@ -85,19 +89,22 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the didUpdateLocations method here:
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
         let location = locations[locations.count - 1]
+        
         if location.horizontalAccuracy > 0 {
             locationManager.stopUpdatingLocation()
             print("longitude = \(location.coordinate.longitude), latitude = \(location.coordinate.latitude)")
             
             let latitude = String(location.coordinate.latitude)
             let longitude = String(location.coordinate.longitude)
-            let params : [String : String] = ["lat": latitude, "long": longitude, "appid": APP_ID]
-            cityLabel.text = latitude
+            
+            let params : [String : String] = ["lat": latitude, "lon": longitude, "appid": APP_ID]
             
             getWeatherData(url: WEATHER_URL, parameters: params)
         }
     }
+    
     
     //Write the didFailWithError method here:
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
