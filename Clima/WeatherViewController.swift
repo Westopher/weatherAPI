@@ -28,7 +28,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
         
         //TODO:Set up the location manager here.
         locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
@@ -67,8 +67,8 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the updateWeatherData method here:
     func updateWeatherData(json: JSON) {
-        let tempResult = json["main"]["temp"]
-        //self.cityLabel.text = "String\(tempResult)"
+        let tempResult = json["main"]["temp"].double
+        weatherDataModel.temperature = Int(tempResult! - 273.15)
     }
 
     
@@ -91,9 +91,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the didUpdateLocations method here:
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
         let location = locations[locations.count - 1]
-        
         if location.horizontalAccuracy > 0 {
             locationManager.stopUpdatingLocation()
             print("longitude = \(location.coordinate.longitude), latitude = \(location.coordinate.latitude)")
