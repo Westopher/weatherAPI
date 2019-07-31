@@ -7,7 +7,7 @@ import SwiftyJSON
 class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Constants
-    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
+    let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=61fe2713c932b2a01162cf784e550f91"
     let APP_ID = "61fe2713c932b2a01162cf784e550f91"
     /***Get your own App ID at https://openweathermap.org/appid ****/
     
@@ -40,7 +40,17 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     
     //Write the getWeatherData method here:
     func getWeatherData(url: String, parameters: [String: String]) {
-        
+        Alamofire.request(url, method: .get, parameters: parameters).responseJSON {
+            response in
+            if response.result.isSuccess {
+                print("got weather data")
+                let weatherJSON: JSON = JSON(response.result.value!)
+                print(weatherJSON)
+            } else {
+                print("Error \(response.result.error)")
+                self.cityLabel.text = "Connection Failed"
+            }
+        }
     }
 
     
