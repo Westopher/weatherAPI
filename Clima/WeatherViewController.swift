@@ -14,7 +14,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
 
     //TODO: Declare instance variables here
     let locationManager = CLLocationManager()
-
+    let weatherDataModel = WeatherDataModel()
     
     //Pre-linked IBOutlets
     @IBOutlet weak var weatherIcon: UIImageView!
@@ -68,7 +68,7 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate {
     //Write the updateWeatherData method here:
     func updateWeatherData(json: JSON) {
         let tempResult = json["main"]["temp"]
-        self.cityLabel.text = "String\(tempResult)"
+        //self.cityLabel.text = "String\(tempResult)"
     }
 
     
